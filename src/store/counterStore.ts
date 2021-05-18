@@ -39,7 +39,7 @@ export class CounterStoreModel extends Store<any> implements StoreModel {
    * Decrement count
    */
   public decrementAction() {
-    if (this._state.value.count ===0) return;
+    if (this.state.count ===0) return;
     this._state.next({
       ...this.state,
       count: this.state.count -1,
