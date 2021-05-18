@@ -5,3 +5,7 @@ export interface NewtonStore<T> {
   readonly _state: BehaviorSubject<T>
   readonly _$state: Observable<T>
 }
+
+export type FilterOptions = {
+  [key: string]: any
+}

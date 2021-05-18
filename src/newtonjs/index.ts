@@ -1,6 +1,8 @@
 import {BehaviorSubject, Observable} from 'rxjs';
 import {NewtonStore} from './types';
 import {Subscription} from 'rxjs';
+import {pluck} from 'rxjs/operators';
+
 
 /**
  * Provide Default Methods for stores
@@ -28,12 +30,25 @@ export class Store<T> implements NewtonStore<T> {
   }
 
   /**
-   * Subscribe to _state subject
+   * Subscribe to _$state Observable
    * @param {Function} callback
    * @return {Subscription}
    */
   public subscribe(callback:any): Subscription {
-    return this._state.subscribe(callback);
+    return this._$state.subscribe((val) => callback(val));
+  }
+
+  /**
+   * Subscribe to a _state value
+   * @param {Function} callback
+   * @param {string} key
+   * @return {Subscription}
+   */
+  public subscribeToOneValue(callback:any, key: string): Subscription {
+    const value$ = this._$state.pipe(
+        pluck(key),
+    );
+    return value$.subscribe((val) => callback(val));
   }
 }
 

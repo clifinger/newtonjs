@@ -2,7 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Increment from './Increment';
-import {useStore} from './newtonjs/useStore';
+import {useNewtonState} from './newtonjs/hooks';
 import {counterStore} from './store';
 
 /**
@@ -10,7 +10,7 @@ import {counterStore} from './store';
  * @constructor
  */
 function App() {
-  const [counter] = useStore(counterStore);
+  const counter = useNewtonState(counterStore);
   return (
     <div className="App">
       <header className="App-header">

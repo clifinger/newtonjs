@@ -11,6 +11,7 @@ interface StoreModel {
 
 export const initialSate = {
   count: 0,
+  key: 'test',
 };
 
 /**

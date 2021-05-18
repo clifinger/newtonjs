@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import {useIsomorphicLayoutEffect} from 'react-use';
-import {Store} from './index';
+import {Store} from '../index';
 
 
-export const useStore = (store: Store<any>) => {
+const newtonState = (store: Store<any>) => {
   const [state, setState] = useState(store.initialState);
   useIsomorphicLayoutEffect(()=> {
     const subject = store.subscribe(setState);
@@ -11,5 +11,7 @@ export const useStore = (store: Store<any>) => {
       subject.unsubscribe();
     };
   }, [store.state]);
-  return [state, store];
+  return state;
 };
+
+export default newtonState;
