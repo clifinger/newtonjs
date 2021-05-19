@@ -3,7 +3,7 @@ import {useIsomorphicLayoutEffect} from 'react-use';
 import {Store} from '../index';
 
 
-const newtonValue = (store: Store<any>, key: string) => {
+const newtonAsyncValue = (store: Store<any>, key: string) => {
   if (store.initialState[key] === undefined) {
     throw new Error(`The key "${key}" is not define in your state`);
   }
@@ -14,8 +14,8 @@ const newtonValue = (store: Store<any>, key: string) => {
       Observable.unsubscribe();
     };
   }, [store.state[key]]);
-
-  return value;
+  console.log(value);
+  return [value.values, value.loading, value.error, value.$destroy];
 };
 
-export default newtonValue;
+export default newtonAsyncValue;

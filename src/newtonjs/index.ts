@@ -1,5 +1,5 @@
 import {BehaviorSubject, Observable} from 'rxjs';
-import {NewtonStore} from './types';
+import {State, NewtonStore} from './types';
 import {Subscription} from 'rxjs';
 import {pluck} from 'rxjs/operators';
 
@@ -8,7 +8,7 @@ import {pluck} from 'rxjs/operators';
  * Provide Default Methods for stores
  */
 export class Store<T> implements NewtonStore<T> {
-  readonly initialState: T;
+  readonly initialState: State;
   readonly _state: BehaviorSubject<T|any>;
   readonly _$state: Observable<T>;
 
@@ -45,6 +45,9 @@ export class Store<T> implements NewtonStore<T> {
    * @return {Subscription}
    */
   public subscribeToOneValue(callback:any, key: string): Subscription {
+    if (this.initialState[key] === undefined ) {
+      throw new Error(`The key "${key}" is not define in your initial state`);
+    }
     const value$ = this._$state.pipe(
         pluck(key),
     );

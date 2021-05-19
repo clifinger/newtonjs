@@ -13,14 +13,12 @@ function App() {
   const counter = useNewtonState(counterStore);
   return (
     <div className="App">
-      <header className="App-header">
-        <p>Increment with newtonJS</p>
-        <p>
+      <h1>Increment with newtonJS</h1>
+      <p>
           Value of increment in the parent: {counter.count}
-        </p>
-        <p>Children:</p>
-        <Increment />
-      </header>
+      </p>
+      <p>Children:</p>
+      <Increment />
     </div>
   );
 }

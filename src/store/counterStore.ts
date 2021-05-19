@@ -1,4 +1,7 @@
 import {Store} from '../newtonjs';
+import {ajax} from 'rxjs/ajax';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 interface CounterState {
   count: number
@@ -11,7 +14,7 @@ interface StoreModel {
 
 export const initialSate = {
   count: 0,
-  key: 'test',
+  users: {},
 };
 
 /**
@@ -45,5 +48,43 @@ export class CounterStoreModel extends Store<any> implements StoreModel {
       ...this.state,
       count: this.state.count -1,
     });
+  }
+
+  /**
+   * Decrement count
+   */
+  public userRequestAction() {
+    const $destroy = new Subject<boolean>();
+    const obs$ = ajax.getJSON(`https://reqres.in/api/users?delay=3`);
+    this._state.next({
+      ...this.state,
+      users: {loading: true, error: false, values: undefined, $destroy},
+    });
+    return obs$.pipe(takeUntil(this.state.users.$destroy)).subscribe({
+      next: (v) => {
+        this._state.next({
+          ...this.state,
+          users: {values: v, error: false, loading: false, $destroy},
+        });
+      },
+      error: (e) => {
+        this._state.next({
+          ...this.state,
+          users: {error: e, values: this.state.users.values, loading: false, $destroy},
+        });
+      },
+      complete: () => {
+        this._state.next({
+          ...this.state,
+          users: {
+            loading: false,
+            values: this.state.users.values,
+            error: this.state.users.error,
+            $destroy,
+          },
+        });
+      },
+    },
+    );
   }
 }
