@@ -12,6 +12,7 @@ const newtonAsyncValue = (store: Store<any>, key: string) => {
     const Observable = store.subscribeToOneValue(setValue, key);
     return () => {
       Observable.unsubscribe();
+      value?.$destroy?.unsubscribe();
     };
   }, [store.state[key]]);
   console.log(value);
